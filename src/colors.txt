@@ -1,0 +1,16 @@
+red
+yellow
+purple
+orange
+green
+black
+white
+gray
+blue
+pink
+brown
+gold
+violet
+teal
+cobalt
+rust
