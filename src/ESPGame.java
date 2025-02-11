@@ -14,8 +14,8 @@
 
 
 import java.io.*;
-
 import java.util.*;
+import java.text.*;
 
 public class ESPGame {
 	
@@ -51,29 +51,35 @@ public class ESPGame {
 			if(choice == 1) numColors = 16;
 			else if(choice == 2) numColors = 10;
 			else if(choice == 3) numColors = 5;
-			else if(choice == 4) {
+			else if(choice == 4) { //User inputs their name, due date, and a short biography. This information is then saved to a file
 				System.out.print("Enter your name: ");
 				String userName = new String(keyboard.nextLine());
 				System.out.print("Describe yourself: ");
 				String bio = new String(keyboard.nextLine());
 				System.out.print("Due Date (MM/DD/YYYY): ");
-				String dueDate = new String("0000000000");
-				while(((dueDate.charAt(2) != '/') || (dueDate.charAt(5) != '/'))
-					 || dueDate.length() < 10) { 
-					dueDate = new String(keyboard.nextLine());
-					if(((dueDate.charAt(2) != '/') || (dueDate.charAt(5) != '/'))
-					  || dueDate.length() < 10) System.out.println("Please enter the date in the format MM/DD/YYYY");
+				String dueDate = new String("");
+				SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+				format.setLenient(false);
+				while(true) { //I figured out this method of validating the date from stack overflow and google.
+					try {
+						dueDate = keyboard.nextLine();
+						format.parse(dueDate);
+						break; 
+						
+					} catch (ParseException e) {
+						System.out.println(dueDate + " is not a valid date. Please use the format MM/DD/YYYY");
+					}
+					//dueDate = new String(keyboard.nextLine());
+					//if(!format.equals(dueDate)) System.out.print("Please enter the date in the format MM/DD/YYYY \nDue Date: ");
 				}
 				outFile.println(new String("Game Over"));
 				outFile.println(new String("You guessed " + wins + " out of 3 colors correctly."));
 				outFile.print(new String("Due Date: ")); outFile.println(dueDate);
 				outFile.print(new String("Username: ")); outFile.println(userName);
 				outFile.print(new String("Biography: ")); outFile.println(bio);
-				Calendar currentDate = Calendar.getInstance(); //figured out this with the API.
-				outFile.print(new String("Date: ")); outFile.println(currentDate.get(Calendar.DAY_OF_MONTH) + "/" 
-																   + currentDate.get(Calendar.MONTH) + "/" 
-																   + currentDate.get(Calendar.YEAR));
+				outFile.print(new String("Date: ")); outFile.println(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
 				outFile.println();
+				outFile.close();
 				continue;
 			}
 			
@@ -82,7 +88,6 @@ public class ESPGame {
 			String fileName = keyboard.nextLine();
 			File inputFile = new File(fileName);
 			Scanner input = new Scanner(inputFile);
-			//lines 62-106 handle the file input
 			String COLOR_1 = null, COLOR_2 = null, COLOR_3 = null, COLOR_4 = null,
 				   COLOR_5 = null, COLOR_6 = null, COLOR_7 = null, COLOR_8 = null,
 				   COLOR_9 = null, COLOR_10 = null, COLOR_11 = null, COLOR_12 = null,
@@ -129,9 +134,8 @@ public class ESPGame {
 				}
 			}
 			
-			//lines 112-147 generate the computer's secret color.
 			Random rand = new Random(); 
-			String guess, secretColor = null;
+			String guess, secretColor = null; //guess refers to the players guess, and secretColor refers to the computer's "guess"
 			wins = 0; 
 			int colorSwitch; 
 			for(int i = 0; i < rounds; i++) {
@@ -190,7 +194,6 @@ public class ESPGame {
 		}
 		keyboard.close();
 		System.exit(0);
-		outFile.close();
 			
 	}
 }
