@@ -28,8 +28,9 @@ public class ESPGame {
 		Scanner keyboard = new Scanner(System.in);
 		
 		final int rounds = 3;
-		int choice = 0; //Users input selection for the menu in the main loop
-		while(choice != 4) {
+		int choice = 0;
+		int wins = 0; //
+		while(choice != 4) { //This is the main loop of the program. 
 			
 			choice = 0;
 			while(choice < 1 || choice > 4) {
@@ -38,22 +39,45 @@ public class ESPGame {
 								+ "\n 2. Guess a random color from 10 colors (3 rounds)"
 								+ "\n 3. Guess a random color from 5 colors (3 rounds)"
 								+ "\n 4. Exit game");
-			if(keyboard.hasNextInt()) choice = keyboard.nextInt();
+			if(keyboard.hasNextInt()) choice = keyboard.nextInt(); //Validating user input
 			else {
 				System.out.println("Invalid input!");
 				keyboard.nextLine();
 			}
 			}
+			keyboard.nextLine(); //Getting the newline character out of the buffer
 			
 			int numColors = 16;
 			if(choice == 1) numColors = 16;
 			else if(choice == 2) numColors = 10;
 			else if(choice == 3) numColors = 5;
-			else continue;
+			else if(choice == 4) {
+				System.out.print("Enter your name: ");
+				String userName = new String(keyboard.nextLine());
+				System.out.print("Describe yourself: ");
+				String bio = new String(keyboard.nextLine());
+				System.out.print("Due Date (MM/DD/YYYY): ");
+				String dueDate = new String("0000000000");
+				while(((dueDate.charAt(2) != '/') || (dueDate.charAt(5) != '/'))
+					 || dueDate.length() < 10) { 
+					dueDate = new String(keyboard.nextLine());
+					if(((dueDate.charAt(2) != '/') || (dueDate.charAt(5) != '/'))
+					  || dueDate.length() < 10) System.out.println("Please enter the date in the format MM/DD/YYYY");
+				}
+				outFile.println(new String("Game Over"));
+				outFile.println(new String("You guessed " + wins + " out of 3 colors correctly."));
+				outFile.print(new String("Due Date: ")); outFile.println(dueDate);
+				outFile.print(new String("Username: ")); outFile.println(userName);
+				outFile.print(new String("Biography: ")); outFile.println(bio);
+				Calendar currentDate = Calendar.getInstance(); //figured out this with the API.
+				outFile.print(new String("Date: ")); outFile.println(currentDate.get(Calendar.DAY_OF_MONTH) + "/" 
+																   + currentDate.get(Calendar.MONTH) + "/" 
+																   + currentDate.get(Calendar.YEAR));
+				outFile.println();
+				continue;
+			}
 			
-			
-			keyboard.nextLine(); //Getting the newline character out of the buffer.
-			
+
 			System.out.println("Enter the filename for \'colors.txt\': ");
 			String fileName = keyboard.nextLine();
 			File inputFile = new File(fileName);
@@ -108,7 +132,8 @@ public class ESPGame {
 			//lines 112-147 generate the computer's secret color.
 			Random rand = new Random(); 
 			String guess, secretColor = null;
-			int wins = 0, colorSwitch; 
+			wins = 0; 
+			int colorSwitch; 
 			for(int i = 0; i < rounds; i++) {
 				colorSwitch = rand.nextInt(numColors);
 				switch(colorSwitch) {
