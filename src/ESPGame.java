@@ -69,8 +69,6 @@ public class ESPGame {
 					} catch (ParseException e) {
 						System.out.println(dueDate + " is not a valid date. Please use the format MM/DD/YYYY");
 					}
-					//dueDate = new String(keyboard.nextLine());
-					//if(!format.equals(dueDate)) System.out.print("Please enter the date in the format MM/DD/YYYY \nDue Date: ");
 				}
 				outFile.println(new String("Game Over"));
 				outFile.println(new String("You guessed " + wins + " out of 3 colors correctly."));
