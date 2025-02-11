@@ -68,6 +68,7 @@ public class ESPGame {
 						
 					} catch (ParseException e) {
 						System.out.println(dueDate + " is not a valid date. Please use the format MM/DD/YYYY");
+						System.out.println("Due Date:");
 					}
 				}
 				outFile.println(new String("Game Over"));
